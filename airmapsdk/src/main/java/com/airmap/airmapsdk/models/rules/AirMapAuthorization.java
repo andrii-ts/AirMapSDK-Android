@@ -4,11 +4,14 @@ import androidx.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.airmap.airmapsdk.models.AirMapBaseModel;
+import com.airmap.airmapsdk.models.shapes.AirMapGeometry;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import static com.airmap.airmapsdk.util.Utils.optString;
 
@@ -46,7 +49,10 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
     private AirMapAuthority authority;
     private String description;
     private String message;
+    private AirMapGeometry geometry;
     private String referenceNumber;
+    private String airspaceCategory;
+    private ArrayList<String> notices;
 
     public AirMapAuthorization(JSONObject jsonObject) {
         constructFromJson(jsonObject);
@@ -65,6 +71,19 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
         setMessage(optString(json, "message"));
         setDescription(optString(json, "description"));
         setReferenceNumber(optString(json, "reference_number"));
+        setAirspaceCategory(optString(json, "airspace_category"));
+        setGeometry(AirMapGeometry.getGeometryFromGeoJSON(json.optJSONObject("geometry")));
+
+        if(json.has("notices")){
+            notices = new ArrayList<>();
+            JSONArray noticesArray = json.optJSONArray("notices");
+            for(int i = 0; i < noticesArray.length(); i++){
+                JSONObject notice = noticesArray.optJSONObject(i);
+                if(notice != null){
+                    notices.add(notice.optString("message"));
+                }
+            }
+        }
         return this;
     }
 
@@ -108,6 +127,30 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
 
     public void setReferenceNumber(String referenceNumber) {
         this.referenceNumber = referenceNumber;
+    }
+
+    public String getAirspaceCategory() {
+        return airspaceCategory;
+    }
+
+    public void setAirspaceCategory(String airspaceCategory) {
+        this.airspaceCategory = airspaceCategory;
+    }
+
+    public ArrayList<String> getNotices() {
+        return notices;
+    }
+
+    public void setNotices(ArrayList<String> notices) {
+        this.notices = notices;
+    }
+
+    public AirMapGeometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(AirMapGeometry geometry) {
+        this.geometry = geometry;
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -154,6 +197,10 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
 
         if (!TextUtils.isEmpty(getReferenceNumber())) {
             authorizationObject.put("reference_number", getReferenceNumber());
+        }
+
+        if(!TextUtils.isEmpty(getAirspaceCategory())){
+            authorizationObject.put("airspace_category", getAirspaceCategory());
         }
 
         if (getAuthority() != null) {

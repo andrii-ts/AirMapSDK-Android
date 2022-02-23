@@ -39,20 +39,14 @@ android {
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.0.0'
-    }
-    plugins {
-        javalite {
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-        }
+        artifact = 'com.google.protobuf:protoc:3.14.0'
     }
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-                remove java
-            }
-            task.plugins {
-                javalite { }
+                java {
+                    option "lite"
+                }
             }
         }
     }
@@ -83,20 +77,26 @@ dependencies {
     api 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.2.1'
     api 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.2.1'
 
+    //This dependency stops the app from crashing when targeting android SDK 30
+    //it is included in the mapbox SDK v9.4.x and later
+    //todo once Mapbox is upgraded this should be removed.
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
+
+
     // shared libraries
     api 'com.jakewharton.timber:timber:4.7.1'
     api 'joda-time:joda-time:2.9.9'
     api 'io.reactivex:rxandroid:1.2.1'
     api 'com.googlecode.libphonenumber:libphonenumber:8.8.2'
     api 'online.devliving:securedpreferencestore:0.3.1' // Newer version available, but updating requires making some api changes within our code
-    api 'net.openid:appauth:0.7.1'
+    api 'net.openid:appauth:0.10.0'
     api 'com.neovisionaries:nv-websocket-client:2.9'
 
 
     // other
     api 'com.squareup.okhttp3:okhttp:3.14.7'
     api 'com.auth0.android:jwtdecode:1.1.1'
-    api 'com.google.protobuf:protobuf-lite:3.0.1'
+    api 'com.google.protobuf:protobuf-javalite:3.14.0'
     api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     api 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 }

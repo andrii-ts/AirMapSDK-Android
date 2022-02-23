@@ -107,6 +107,7 @@ public class SystemStatusService extends BaseService {
                 notNormalComponents.add(components.get(systemStatusComponent.getId()));
             }
         }
+        notifyOverallSystemHealth(overallSystemHealth);
         notifyBrokenComponents();
     }
 

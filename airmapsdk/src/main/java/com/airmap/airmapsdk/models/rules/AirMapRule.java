@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.airmap.airmapsdk.util.Utils.optString;
 
 public class AirMapRule implements Serializable, AirMapBaseModel {
@@ -71,9 +73,14 @@ public class AirMapRule implements Serializable, AirMapBaseModel {
 
             List<AirMapFlightFeature> flightFeatures = new ArrayList<>();
             if (json.has("flight_features")) {
-                JSONArray flightFeaturesArray = json.optJSONArray("flight_features");
-                for (int i = 0; i < flightFeaturesArray.length(); i++) {
-                    flightFeatures.add(new AirMapFlightFeature(flightFeaturesArray.optJSONObject(i)));
+                try{
+                    JSONArray flightFeaturesArray = json.optJSONArray("flight_features");
+                    for (int i = 0; i < flightFeaturesArray.length(); i++) {
+                        flightFeatures.add(new AirMapFlightFeature(flightFeaturesArray.optJSONObject(i)));
+                    }
+                } catch (NullPointerException npe){
+                    Timber.e("NullPointerException when trying to add flight features from rule json");
+                    npe.printStackTrace();
                 }
             }
             setFlightFeatures(flightFeatures);

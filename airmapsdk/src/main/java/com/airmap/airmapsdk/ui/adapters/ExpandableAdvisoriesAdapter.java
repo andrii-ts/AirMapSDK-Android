@@ -3,11 +3,11 @@ package com.airmap.airmapsdk.ui.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
@@ -65,7 +65,6 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
 
     public void setDataUnseparated(LinkedHashMap<MappingService.AirMapAirspaceType, List<AirMapAdvisory>> data) {
         super.setData(data == null ? null : separateByColor(data));
-        notifyDataSetChanged();
     }
 
     @Override
@@ -74,7 +73,8 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
         throw new RuntimeException("please call setDataUnseparated instead");
     }
 
-    private static LinkedHashMap<Pair<MappingService.AirMapAirspaceType, AirMapColor>, List<AirMapAdvisory>> separateByColor(Map<MappingService.AirMapAirspaceType, List<AirMapAdvisory>> og) {
+    private static LinkedHashMap<Pair<MappingService.AirMapAirspaceType, AirMapColor>, List<AirMapAdvisory>>
+    separateByColor(Map<MappingService.AirMapAirspaceType, List<AirMapAdvisory>> og) {
         LinkedHashMap<Pair<MappingService.AirMapAirspaceType, AirMapColor>, List<AirMapAdvisory>> dataTemp = new LinkedHashMap<>();
         for (MappingService.AirMapAirspaceType type : og.keySet()) {
             for (AirMapAdvisory advisory : og.get(type)) {
@@ -113,18 +113,22 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
             case PARENT_VIEW_TYPE: {
                 return new AirspaceTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_advisory_type, parent, false));
             }
-            case CHILD_VIEW_TYPE: {
+            case CHILD_VIEW_TYPE_A: {
                 return new AdvisoryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_advisory, parent, false));
             }
+            case CHILE_VIEW_TYPE_B: {
+                return new AdvisoryWithScheduleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_advisory_schedule, parent, false));
+            }
+            default:
+                throw new IllegalStateException("Unexpected value: " + viewType);
         }
-        return null;
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        if (holder instanceof AirspaceTypeViewHolder) {
+        if (holder instanceof AirspaceTypeViewHolder) { //created when advisories are generated and exists while airspace advisories are minimized into types
             Pair<MappingService.AirMapAirspaceType, AirMapColor> type = (Pair<MappingService.AirMapAirspaceType, AirMapColor>) getItem(position);
             Context context = holder.itemView.getContext();
             String typeText = context.getString(type.first.getTitle());
@@ -138,33 +142,33 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
             ((AirspaceTypeViewHolder) holder).expandImageView.setImageResource(isExpanded(type) ? R.drawable.ic_drop_down_up : R.drawable.ic_drop_down);
             ((AirspaceTypeViewHolder) holder).expandImageView.setColorFilter(ContextCompat.getColor(context, getTextColor(color)), PorterDuff.Mode.SRC_ATOP);
 
-        } else if (holder instanceof AdvisoryViewHolder) {
+        } else if (holder instanceof AdvisoryWithScheduleViewHolder){
             final AirMapAdvisory advisory = (AirMapAdvisory) getItem(position);
+            ((AdvisoryWithScheduleViewHolder) holder).backgroundView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), advisory.getColor().getColorRes()));
+            ((AdvisoryWithScheduleViewHolder) holder).scheduleAdvisoryLayout.setVisibility(View.VISIBLE);
+            ((AdvisoryWithScheduleViewHolder) holder).scheduleAirspaceType.setText(advisory.getType().getTitle());
+            ((AdvisoryWithScheduleViewHolder) holder).scheduleAirspaceName.setText(advisory.getName());
 
-            if(advisory.getSchedule() != null){
-                ((AdvisoryViewHolder) holder).backgroundView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), advisory.getColor().getColorRes()));
-                ((AdvisoryViewHolder) holder).nonScheduleAdvisoryLayout.setVisibility(View.GONE);
-                ((AdvisoryViewHolder) holder).scheduleAdvisoryLayout.setVisibility(View.VISIBLE);
-                ((AdvisoryViewHolder) holder).scheduleAirspaceType.setText(advisory.getType().getTitle());
-                ((AdvisoryViewHolder) holder).scheduleAirspaceName.setText(advisory.getName());
-
-                for(Timesheet timesheet : advisory.getSchedule()){
-                    if(!timesheet.isActive()){
-                        ((AdvisoryViewHolder) holder).scheduleAirspaceInactive.setVisibility(View.VISIBLE);
-                    }
+            for(Timesheet timesheet : advisory.getSchedule()){
+                if(!timesheet.isActive()){
+                    ((AdvisoryWithScheduleViewHolder) holder).scheduleAirspaceInactive.setVisibility(View.VISIBLE);
                 }
-
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        scheduleActivityIntent.putExtra("AirMapAdvisory", advisory);
-                        holder.itemView.getContext().startActivity(scheduleActivityIntent);
-                    }
-                });
-                return;
             }
 
-            ((AdvisoryViewHolder) holder).backgroundView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), advisory.getColor().getColorRes()));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    scheduleActivityIntent.putExtra("AirMapAdvisory", advisory);
+                    holder.itemView.getContext().startActivity(scheduleActivityIntent);
+                }
+            });
+            return;
+
+        } else if (holder instanceof AdvisoryViewHolder) { //called when a airspace type is expanded to show advisories.
+            final AirMapAdvisory advisory = (AirMapAdvisory) getItem(position);
+
+            ((AdvisoryViewHolder) holder).numSimilarAdvisories.setText(String.valueOf(advisory.getNumSimilarAdvisories()));
+            ((AdvisoryViewHolder) holder).numSimilarAdvisories.getBackground().setColorFilter(ContextCompat.getColor(holder.itemView.getContext(), advisory.getColor().getColorRes()), PorterDuff.Mode.SRC_ATOP);
             ((AdvisoryViewHolder) holder).titleTextView.setText(advisory.getName());
             ((AdvisoryViewHolder) holder).infoTextView.setOnClickListener(null);
             ((AdvisoryViewHolder) holder).infoTextView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.font_light_grey));
@@ -341,7 +345,7 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
 
             // if this advisory accepts digital notice, show user
             if (advisory.getRequirements() != null && advisory.getRequirements().getNotice() != null && advisory.getRequirements().getNotice().isDigital()) {
-                info = holder.itemView.getContext().getString(R.string.accepts_digital_notice);
+                info = "";
                 holder.itemView.setOnClickListener(null);
                 ((AdvisoryViewHolder) holder).infoTextView.setTextColor(ContextCompat.getColor(((AdvisoryViewHolder) holder).infoTextView.getContext(), R.color.colorAccent));
             }
@@ -458,26 +462,36 @@ public class ExpandableAdvisoriesAdapter extends ExpandableRecyclerAdapter<Pair<
     }
 
     private class AdvisoryViewHolder extends RecyclerView.ViewHolder {
-        View backgroundView;
         TextView titleTextView;
         TextView infoTextView;
         TextView descriptionTextView;
+        TextView numSimilarAdvisories;
         ImageView linkButton;
         RelativeLayout nonScheduleAdvisoryLayout;
+
+        AdvisoryViewHolder(View itemView) {
+            super(itemView);
+
+            titleTextView = itemView.findViewById(R.id.title_text_view);
+            infoTextView = itemView.findViewById(R.id.info_text_view);
+            descriptionTextView = itemView.findViewById(R.id.description_text_view);
+            numSimilarAdvisories = itemView.findViewById(R.id.num_similar_textView);
+            linkButton = itemView.findViewById(R.id.link_button);
+            nonScheduleAdvisoryLayout = itemView.findViewById(R.id.non_schedule_view);
+        }
+    }
+
+    private class AdvisoryWithScheduleViewHolder  extends RecyclerView.ViewHolder {
+        View backgroundView;
         RelativeLayout scheduleAdvisoryLayout;
         TextView scheduleAirspaceType;
         TextView scheduleAirspaceName;
         TextView scheduleAirspaceInactive;
 
-        AdvisoryViewHolder(View itemView) {
+        public AdvisoryWithScheduleViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            backgroundView = itemView.findViewById(R.id.background_view);
-            titleTextView = itemView.findViewById(R.id.title_text_view);
-            infoTextView = itemView.findViewById(R.id.info_text_view);
-            descriptionTextView = itemView.findViewById(R.id.description_text_view);
-            linkButton = itemView.findViewById(R.id.link_button);
-            nonScheduleAdvisoryLayout = itemView.findViewById(R.id.non_schedule_view);
+            backgroundView = itemView.findViewById(R.id.schedule_background_view);
             scheduleAdvisoryLayout = itemView.findViewById(R.id.schedule_view);
             scheduleAirspaceType = itemView.findViewById(R.id.schedule_airspace_type);
             scheduleAirspaceName = itemView.findViewById(R.id.schedule_airspace_name);

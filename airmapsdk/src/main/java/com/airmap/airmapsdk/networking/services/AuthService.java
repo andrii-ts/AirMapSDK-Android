@@ -24,7 +24,7 @@ import net.openid.appauth.AuthorizationRequest;
 import net.openid.appauth.AuthorizationService;
 import net.openid.appauth.AuthorizationServiceConfiguration;
 import net.openid.appauth.ResponseTypeValues;
-import net.openid.appauth.browser.BrowserBlacklist;
+//import net.openid.appauth.browser.BrowserBlacklist;
 import net.openid.appauth.browser.Browsers;
 import net.openid.appauth.browser.VersionRange;
 import net.openid.appauth.browser.VersionedBrowserMatcher;
@@ -232,34 +232,4 @@ public class AuthService extends BaseService {
         });
     }
 
-    public static void getInsuranceToken(final AirMapCallback<String> listener) {
-        Map<String,Object> params = new HashMap<>();
-        params.put("jwt", AirMap.getAuthToken());
-        AirMap.getClient().postWithJsonBody(insuranceDelegationUrl, params, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (listener != null) {
-                    listener.error(new AirMapException(e.getMessage()));
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String json = response.body().string();
-                    response.body().close();
-                    JSONObject jsonObject = new JSONObject(json);
-                    String customToken = jsonObject.getString("jwt");
-                    if (listener != null) {
-                        listener.success(customToken);
-                    }
-                } catch (JSONException e) {
-                    Timber.e(e, "error parsing json");
-                    if (listener != null) {
-                        listener.error(new AirMapException(response.code(), e.getMessage()));
-                    }
-                }
-            }
-        });
-    }
 }

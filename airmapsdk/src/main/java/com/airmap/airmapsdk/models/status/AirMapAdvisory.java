@@ -46,6 +46,7 @@ public class AirMapAdvisory implements Serializable, AirMapBaseModel {
     private String geometryString;
     private AirMapStatusRequirement requirements;
     private List<Timesheet> schedule;
+    private int numSimilarAdvisories = 1; //Used only when displaying advisories in command center drawer. Starts at 1, add to for every similar advisory with the same name & height restriction.
 
     private AirMapOptionalProperties optionalProperties;
 
@@ -432,5 +433,17 @@ public class AirMapAdvisory implements Serializable, AirMapBaseModel {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public void incrementNamSimilarAdvisories() {
+        numSimilarAdvisories++;
+    }
+
+    public int getNumSimilarAdvisories() {
+        return numSimilarAdvisories;
+    }
+
+    public void setNumSimilarAdvisories(int numSimilarAdvisories) {
+        this.numSimilarAdvisories = numSimilarAdvisories;
     }
 }

@@ -13,6 +13,8 @@ import com.airmap.airmapsdk.Auth;
 import com.airmap.airmapsdk.auth.AuthConstants;
 import com.airmap.airmapsdk.models.AirMapWeather;
 import com.airmap.airmapsdk.models.Coordinate;
+import com.airmap.airmapsdk.models.agreements.Agreement;
+import com.airmap.airmapsdk.models.agreements.AgreementStatus;
 import com.airmap.airmapsdk.models.aircraft.AirMapAircraft;
 import com.airmap.airmapsdk.models.aircraft.AirMapAircraftManufacturer;
 import com.airmap.airmapsdk.models.aircraft.AirMapAircraftModel;
@@ -194,10 +196,6 @@ public final class AirMap {
 
     public static void getFirebaseToken(AirMapCallback<String> callback) {
         AuthService.getFirebaseToken(callback);
-    }
-
-    public static void getInsuranceToken(AirMapCallback<String> callback) {
-        AuthService.getInsuranceToken(callback);
     }
 
     /**
@@ -1053,6 +1051,26 @@ public final class AirMap {
 
     public static String getBaseJurisdictionsUrlTemplate() {
         return airMapMapMappingService.getBaseJurisdictionsUrlTemplate();
+    }
+
+    /////////////
+    // Agreements
+    /////////////
+
+    public static Call getAgreements(String authorityId, AirMapCallback<List<Agreement>> callback){
+        return AgreementService.getAgreements(authorityId, callback);
+    }
+
+    public static Call getAgreement(String agreementId, AirMapCallback<Agreement> callback){
+        return AgreementService.getAgreement(agreementId, callback);
+    }
+
+    public static Call getAgreementStatus(String agreementId, AirMapCallback<AgreementStatus> callback){
+        return AgreementService.getAgreementStatus(agreementId, callback);
+    }
+
+    public static Call agreeToAgreement(String agreementId, AirMapCallback<Void> callback){
+        return AgreementService.agreeToAgreement(agreementId, callback);
     }
 
     //////////

@@ -30,10 +30,12 @@ import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.LocationComponentOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import java.util.List;
 
@@ -179,7 +181,14 @@ public abstract class MyLocationMapActivity extends AppCompatActivity implements
                     .build();
 
             // Activate with options
-            map.getStyle((style -> locationComponent.activateLocationComponent(this, style, options)));
+            map.getStyle(style -> {
+                LocationComponentActivationOptions locationComponentActivationOptions = LocationComponentActivationOptions
+                        .builder(MyLocationMapActivity.this, style)
+                        .locationComponentOptions(options)
+                        .build();
+                locationComponent.activateLocationComponent(locationComponentActivationOptions);
+            });
+            //map.getStyle((style -> locationComponent.activateLocationComponent(this, style, options)));
 
             // Enable to make component visible
             locationComponent.setLocationComponentEnabled(true);

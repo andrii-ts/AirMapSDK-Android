@@ -515,7 +515,7 @@
     <!-- Title for the row displaying the name of the aircraft -->
     <string name="flight_plan_row_title_aircraft_name">Aircraft</string>
     <!-- Title for the row displaying flight plan altitude -->
-    <string name="airmap_max_altitude">Altitude</string>
+Add    <string name="airmap_max_altitude">Height</string>
     <!-- Title for the row displaying flight plan buffer -->
     <string name="flight_plan_row_title_buffer">Buffer</string>
     <!-- Title for the row displaying flight plan duration -->

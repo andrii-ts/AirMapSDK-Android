@@ -82,7 +82,6 @@ public class BaseService {
 
     //Auth
     protected static final String anonymousLoginUrl = apiUrl + "/auth/v1/anonymous/token";
-    protected static final String insuranceDelegationUrl = "https://auth.airmap.io/delegation";
     protected static final String authBaseUrl = getHost("auth") + "/realms/airmap/protocol/openid-connect/";
     protected static final String loginUrl = authBaseUrl + "auth";
     protected static final String refreshTokenUrl = authBaseUrl + "token";
@@ -103,6 +102,15 @@ public class BaseService {
     public static final String systemStatusBaseUrl = apiUrl + systemStatusEndpoint;
     public static final String systemStatusSocketUrl = getHost("wss", "api") + systemStatusEndpoint + "/monitor";
 
+    //Agreements
+    public static final String agreementsVersion = "/v2";
+    public static final String agreementsEndpoint = "/agreements";
+    public static final String agreementsBaseUrl = apiUrl + agreementsEndpoint + agreementsVersion;
+    public static final String listAgreementsUrl = agreementsBaseUrl + "/authority/%s";
+    public static final String getAgreementUrl = agreementsBaseUrl + "/agreement/%s";
+    public static final String getAgreementPdfUrl = agreementsBaseUrl + "/agreement/%s/pdf";
+    public static final String getAgreementStatusUrl = agreementsBaseUrl + "/agreement/%s/agreed";
+    public static final String acceptAgreementUrl = agreementsBaseUrl + "/agreement/%s/agree";
 
     private static String getHost(String service) {
         return getHost("https", service);

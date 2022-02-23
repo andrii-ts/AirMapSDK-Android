@@ -328,7 +328,7 @@ public class AirMapMapView extends MapView implements MapView.OnDidFailLoadingMa
 
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-        if (advisoryClickListeners == null || advisoryClickListeners.isEmpty() || map.getCameraPosition().zoom < 11 || advisorySelector.isBusy()) {
+        if (advisoryClickListeners == null || advisoryClickListeners.isEmpty() || advisorySelector.isBusy()) {
             return false;
         }
 

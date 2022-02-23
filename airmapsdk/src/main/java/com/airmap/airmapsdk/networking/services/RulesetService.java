@@ -218,6 +218,7 @@ public class RulesetService extends BaseService {
         Map<String, Object> params = new HashMap<>();
         params.put("rulesets", TextUtils.join(",", rulesets));
         params.put("geometry", geometry);
+        params.put("with_markdown", true);
         String url = evaluationUrl;
         if (!TextUtils.isEmpty(accessToken)) {
             url += "?access_token=" + accessToken;

@@ -30,7 +30,7 @@ public class ExpandableRulesAdapter extends ExpandableRecyclerAdapter<AirMapRule
             case PARENT_VIEW_TYPE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_brief_section, parent, false);
                 return new SectionViewHolder(view);
-            case CHILD_VIEW_TYPE:
+            case CHILD_VIEW_TYPE_A:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_brief_rule, parent, false);
                 return new RuleViewHolder(view);
         }
@@ -51,7 +51,7 @@ public class ExpandableRulesAdapter extends ExpandableRecyclerAdapter<AirMapRule
                 sectionViewHolder.status = status;
                 break;
             }
-            case CHILD_VIEW_TYPE: {
+            case CHILD_VIEW_TYPE_A: {
                 final AirMapRule rule = (AirMapRule) getItem(position);
                 RuleViewHolder ruleViewHolder = (RuleViewHolder) holder;
                 ruleViewHolder.descriptionTextView.setText(rule.getShortText());

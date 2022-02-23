@@ -20,14 +20,20 @@ public abstract class AirMapGeometry implements Serializable {
             String geoType = optString(geoJson, "type").toLowerCase();
             if (geoType.equals("polygon")) {
                 List<Coordinate> coordinates = new ArrayList<>();
-                JSONArray coordArray = geoJson.optJSONArray("coordinates").optJSONArray(0);
+                //if object is a polygon with a hole
+
+                JSONArray coordArray = geoJson.optJSONArray("coordinates");
                 if (coordArray == null) return null;
-                for (int i = 0; i < coordArray.length(); i++) {
-                    JSONArray coordinate = coordArray.optJSONArray(i);
-                    if (coordinate == null) continue;
-                    LatLng temp = new LatLng(coordinate.optDouble(1), coordinate.optDouble(0)); //Comes in in lng,lat form
-                    coordinates.add(new Coordinate(temp)); //This wraps the coordinate
+                int lengthCoordArray = coordArray.length();
+                for (int i = 0; i < lengthCoordArray; i++){
+                    for (int j = 0; j < coordArray.optJSONArray(i).length(); j++) {
+                        JSONArray coordinate = coordArray.optJSONArray(i).optJSONArray(j);
+                        if (coordinate == null) continue;
+                        LatLng temp = new LatLng(coordinate.optDouble(1), coordinate.optDouble(0)); //Comes in in lng,lat form
+                        coordinates.add(new Coordinate(temp)); //This wraps the coordinate
+                    }
                 }
+
                 return new AirMapPolygon(coordinates);
             } else if (geoType.equals("linestring")) {
                 List<Coordinate> coordinates = new ArrayList<>();
@@ -55,19 +61,52 @@ public abstract class AirMapGeometry implements Serializable {
         try {
             if (geometry instanceof AirMapPolygon) {
                 jsonObject.put("type", "Polygon");
+                JSONArray coordinates = new JSONArray();
+                List<Coordinate> polyCoords = ((AirMapPolygon) geometry).getCoordinates();
+                Coordinate firstCoordinate = polyCoords.get(0);
+                Coordinate lastCoordinate = polyCoords.get(polyCoords.size() - 1);
+                //If polyHasHole there will be 2 polys in coords. Polys wrap back to their starting point. If 1st point is in coords again and not at the end poly has a hole / 2nd poly or has not been closed properly (handled in onGeometryUpdated).
+                Boolean polyHasHole = ((polyCoords.lastIndexOf(firstCoordinate) > 0) && !(firstCoordinate.equals(lastCoordinate)));
 
-                JSONArray polygon = new JSONArray();
-                for (Coordinate coordinate : ((AirMapPolygon) geometry).getCoordinates()) {
-                    JSONArray point = new JSONArray();
-                    point.put(coordinate.getLongitude());
-                    point.put(coordinate.getLatitude());
-                    polygon.put(point);
+                if (!polyHasHole) {
+                    JSONArray polygon = new JSONArray();
+                    for (Coordinate coordinate : polyCoords) {
+                        JSONArray point = new JSONArray();
+                        point.put(coordinate.getLongitude());
+                        point.put(coordinate.getLatitude());
+                        polygon.put(point);
+                    }
+                    coordinates.put(polygon);
+                    jsonObject.put("coordinates", coordinates);
+                } else if (polyHasHole){
+                    //If poly has hole put each geo into polygon, then into JSONArray, then into json object.
+                    JSONArray jsonPolyArray = new JSONArray();
+
+                    if (polyHasHole){
+                        boolean morePolysToCount = true;
+                        do {
+                            int lastOccurance = polyCoords.lastIndexOf(polyCoords.get(0));
+                            if ( lastOccurance > 0){
+                                List<Coordinate> sublist = polyCoords.subList(0, lastOccurance+1);
+                                JSONArray polygon = new JSONArray();
+                                for (Coordinate coordinate : ((AirMapPolygon) new AirMapPolygon(sublist)).getCoordinates()) {
+                                    JSONArray point = new JSONArray();
+                                    point.put(coordinate.getLongitude());
+                                    point.put(coordinate.getLatitude());
+                                    polygon.put(point);
+                                }
+                                jsonPolyArray.put(polygon);
+                                polyCoords = polyCoords.subList(lastOccurance+1, polyCoords.size());
+                                if (polyCoords.size() == 0) {
+                                    morePolysToCount = false;
+                                }
+                            }
+                        } while (morePolysToCount);
+                        jsonObject.put("type", "Polygon");
+                        jsonObject.put("coordinates",jsonPolyArray);
+                    }
                 }
 
-                JSONArray coordinates = new JSONArray();
-                coordinates.put(polygon);
-
-                jsonObject.put("coordinates", coordinates);
             } else if (geometry instanceof AirMapPoint) {
                 jsonObject.put("type", "Point");
 

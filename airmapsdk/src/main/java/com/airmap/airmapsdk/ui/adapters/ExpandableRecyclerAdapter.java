@@ -5,15 +5,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 
+import com.airmap.airmapsdk.models.status.AirMapAdvisory;
+
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public abstract class ExpandableRecyclerAdapter<P,C> extends RecyclerView.Adapter {
 
     protected static final int PARENT_VIEW_TYPE = 0;
-    protected static final int CHILD_VIEW_TYPE = 1;
+    protected static final int CHILD_VIEW_TYPE_A = 1;
+    protected static final int CHILE_VIEW_TYPE_B = 2;
 
     protected LinkedHashMap<P, List<C>> dataMap;
     private Set<P> expandedParents;
@@ -59,7 +64,15 @@ public abstract class ExpandableRecyclerAdapter<P,C> extends RecyclerView.Adapte
         if (dataMap.containsKey(item)) {
             return PARENT_VIEW_TYPE;
         } else {
-            return CHILD_VIEW_TYPE;
+            if(item instanceof AirMapAdvisory){
+                AirMapAdvisory airMapAdvisory = (AirMapAdvisory) item;
+                if(airMapAdvisory.getSchedule() != null){
+                    return CHILE_VIEW_TYPE_B;
+                } else {
+                    return CHILD_VIEW_TYPE_A;
+                }
+            }
+            return CHILD_VIEW_TYPE_A;
         }
     }
 

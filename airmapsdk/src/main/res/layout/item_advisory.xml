@@ -7,133 +7,25 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-    <View
-        android:id="@+id/background_view"
-        android:layout_width="8dp"
-        android:layout_height="match_parent"
-        android:background="@color/status_orange"/>
 
-    <RelativeLayout
-        android:id="@+id/schedule_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="56dp"
-        android:background="?selectableItemBackground"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/schedule_launch_button"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/schedule_airspace_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="Special Use Airspace"
-                android:textStyle="bold"
-                android:textSize="15sp">
-            </TextView>
-
-            <TextView
-                android:id="@+id/schedule_airspace_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="R2513 (HUNTER LIGGETT, CA)"
-                android:textSize="15sp">
-
-            </TextView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/schedule_tag_holder"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/schedule_tag_schedule_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:background="@drawable/schedule_tag">
-
-                    <ImageView
-                        android:id="@+id/schedule_image_schedule_activity"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:tint="@color/colorAccent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_calendar">
-
-                    </ImageView>
-
-                    <TextView
-                        android:id="@+id/schedule_text_schedule_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/schedule_image_schedule_activity"
-                        android:paddingStart="5dp"
-                        android:text="@string/schedule"
-                        android:textColor="@android:color/white">
-                    </TextView>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
-                    android:id="@+id/schedule_airspace_inactive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="@id/schedule_tag_schedule_activity"
-                    app:layout_constraintBottom_toBottomOf="@id/schedule_tag_schedule_activity"
-                    app:layout_constraintStart_toEndOf="@id/schedule_tag_schedule_activity"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/schedule_inactive"
-                    android:visibility="gone">
-                </TextView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryDark"/>
-
-        <ImageView
-            android:id="@+id/schedule_launch_button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_info"
-            android:tint="@color/font_white" />
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/num_similar_textView"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="3333"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/colorTextAndIcons"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:background="@drawable/advisories_num_bg_highligh"/>
 
     <RelativeLayout
         android:id="@+id/non_schedule_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="56dp"
         android:background="?selectableItemBackground">
@@ -151,8 +43,8 @@
                 android:id="@+id/title_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:textColor="@color/font_title"
                 android:textSize="14sp"
                 tools:text="Los Angeles Class B"/>
@@ -161,8 +53,8 @@
                 android:id="@+id/description_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/font_light_grey"
                 android:textSize="11sp"
@@ -173,8 +65,8 @@
                 android:id="@+id/info_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
                 android:textColor="@color/font_light_grey"
                 android:textSize="11sp"
