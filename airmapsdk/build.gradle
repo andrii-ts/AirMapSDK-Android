@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 
 
 group = 'com.airmap.airmapsdk'
-def libVersion = '4.0.0-beta.3'
+def libVersion = '4.1.0-beta.1'
 
 android {
     compileSdkVersion 28
