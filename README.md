@@ -1,19 +1,17 @@
 ![AirMap: The Airspace Platform for Developers](AirMap.png)
-[![Bintray](https://img.shields.io/bintray/v/airmapio/maven/com.airmap.airmapsdk.svg)](http://jcenter.bintray.com/com/airmap/airmapsdk/airmapsdk/)
 [![license](https://img.shields.io/github/license/airmap/AirMapSDK-Android.svg)](https://github.com/airmap/AirMapSDK-Android/blob/master/LICENSE)
 
 Create Flights, Send Telemetry Data, Get Real-time Traffic Alerts.
 
 ## Requirements
-* Minimum Android SDK Level 18 or higher
+* Minimum Android SDK Level 21 or higher
 
-### Sign up for an [AirMap Developer Account.](https://dashboard.airmap.io/developer/)
-
- [https://dashboard.airmap.io/developer](https://dashboard.airmap.io/developer)
+### Sign up for an [AirMap Developer Account.](https://dashboard.airmap.com/developer)
+[https://dashboard.airmap.com/developer](https://dashboard.airmap.com/developer)
  
  
 ### Read Getting Started Guide
-[https://developers.airmap.com/v2.1/docs/getting-started-with-airmap](https://developers.airmap.com/v2.1/docs/getting-started-with-airmap)
+[https://developers.airmap.com/docs/getting-started-with-airmap](https://developers.airmap.com/docs/getting-started-with-airmap)
 
 ## Setup
 
@@ -46,15 +44,6 @@ Simply add this line in your Application or Activity's `onCreate`
 
 ```java
 AirMap.init(this);
-```
-
-### v4 Beta
-
-v4 of the SDK is available in beta. This updated version of the SDK utilizes AndroidX and Mapbox 8.
-**There are breaking changes from v3 of the SDK.**
-
-```groovy
-implementation 'com.airmap.airmapsdk:airmapsdk:4.0.0-beta.3'
 ``` 
 
 ### Migration from 2.0

@@ -18,6 +18,7 @@ public class AirMapConstants {
     public static final String URL_EXTRA = "url_extra";
     public static final String AIRCRAFT_EXTRA = "aircraft_extra";
     public static final String PILOT_EXTRA = "pilot_extra";
+    public static final String PILOT_DELETED_EXTRA = "pilot_deleted_extra";
     public static final String FLIGHT_PLAN_ID_EXTRA = "flight_plan_id_extra";
     public static final String KEY_VALUE_EXTRAS = "key_value_extras";
     public static final String START_DATE_EXTRA = "start_date_extra";

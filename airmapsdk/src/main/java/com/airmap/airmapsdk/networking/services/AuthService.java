@@ -88,8 +88,8 @@ public class AuthService extends BaseService {
         } else {
             authService.performAuthorizationRequest(
                     authRequest,
-                    PendingIntent.getActivity(activity, 0, new Intent(activity, LoginActivity.class), 0),
-                    PendingIntent.getActivity(activity, 0, new Intent(activity, LoginActivity.class), 0));
+                    PendingIntent.getActivity(activity, 0, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_MUTABLE),
+                    PendingIntent.getActivity(activity, 0, new Intent(activity, LoginActivity.class), PendingIntent.FLAG_MUTABLE));
         }
     }
 

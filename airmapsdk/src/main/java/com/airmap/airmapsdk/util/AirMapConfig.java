@@ -212,7 +212,7 @@ public class AirMapConfig {
             return AirMap.getConfig().getJSONObject("app").getString("faq_url");
         } catch (JSONException e) {
             Timber.w(e, "No FAQ in airmap.config.json using fallback");
-            return "https://airmap.typeform.com/to/XDkePS?language=" + Locale.getDefault().getLanguage();
+            return "https://support.airmap.com/hc/" + Locale.getDefault().getLanguage() + "/categories/115000318348-AirMap-for-Drones";
         }
     }
 
@@ -239,7 +239,7 @@ public class AirMapConfig {
             return AirMap.getConfig().getJSONObject("app").getString("feedback_url");
         } catch (JSONException e) {
             Timber.w(e, "No Feedback URL found in airmap.config.json using fallback");
-            return "https://airmap.typeform.com/to/r6MaMO";
+            return "https://support.airmap.com/hc/en-us/requests/new";
         }
     }
 

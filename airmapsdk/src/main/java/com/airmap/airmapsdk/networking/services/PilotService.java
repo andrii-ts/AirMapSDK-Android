@@ -92,6 +92,16 @@ class PilotService extends BaseService {
         return AirMap.getClient().postWithJsonBody(url, params, new PhoneVerificationCallback(listener));
     }
 
+    /**
+     * Delete the users profile. WARNING THIS IS IRREVERSIBLE!
+     *
+     * @param listener The callback that is invoked on success or error
+     */
+    static Call deletePilot(AirMapCallback<AirMapPilot> listener){
+        return AirMap.getClient().delete(pilotBaseUrl, new GenericOkHttpCallback(listener, AirMapPilot.class));
+    }
+
+
     //Aircraft related requests
 
     /**

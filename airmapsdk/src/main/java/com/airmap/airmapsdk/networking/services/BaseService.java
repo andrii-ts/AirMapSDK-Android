@@ -31,6 +31,7 @@ public class BaseService {
     protected static final String flightBaseUrl = apiUrl + "/flight" + flightVersion;
     protected static final String flightGetAllUrl = flightBaseUrl;
     protected static final String flightByIdUrl = flightBaseUrl + "/%s"; //Replace %s with id using String.format
+    protected static final String flightCancelUrl = flightByIdUrl + "/cancel";
     protected static final String flightDeleteUrl = flightByIdUrl + "/delete"; //Replace %s with id using String.format
     protected static final String flightEndUrl = flightByIdUrl + "/end"; //Replace %s with id using String.format
     protected static final String flightStartCommUrl = flightByIdUrl + "/start-comm"; //Replace %s with id using String.format
@@ -38,6 +39,7 @@ public class BaseService {
 
     //Flight Plan
     protected static final String flightPlanUrl = getApiOverride("flightplan", flightBaseUrl + "/plan");
+    protected static final String flightPlanStatusUrl = flightPlanUrl + "/status";
     protected static final String flightPlanByFlightIdUrl = flightBaseUrl + "/%s/plan";
     protected static final String flightPlanPatchUrl = flightPlanUrl + "/%s";
     protected static final String flightPlanBatchAuthorizationsUrl = flightBaseUrl + "/plan/batch/authorizations";

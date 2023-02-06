@@ -5,13 +5,13 @@ apply plugin: 'com.jfrog.bintray'
 
 
 group = 'com.airmap.airmapsdk'
-def libVersion = '4.1.0-beta.1'
+def libVersion = '4.2.0-beta.1'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 32
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 28
+        minSdkVersion 21
+        targetSdkVersion 32
         versionCode 1
         versionName "$libVersion"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -71,16 +71,16 @@ dependencies {
     api "com.google.android.gms:play-services-location:17.0.0"
 
     // mapbox
-    api 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.0'
+    api 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
     api 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v8:0.9.0'
     api 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization-v8:0.11.0'
-    api 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.2.1'
-    api 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.2.1'
+    api 'com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0'
+    api 'com.mapbox.mapboxsdk:mapbox-sdk-turf:5.8.0'
 
     //This dependency stops the app from crashing when targeting android SDK 30
     //it is included in the mapbox SDK v9.4.x and later
     //todo once Mapbox is upgraded this should be removed.
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-telemetry:7.0.0'
 
 
     // shared libraries

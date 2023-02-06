@@ -23,6 +23,7 @@ import com.airmap.airmapsdk.models.comm.AirMapComm;
 import com.airmap.airmapsdk.models.flight.AirMapEvaluation;
 import com.airmap.airmapsdk.models.flight.AirMapFlight;
 import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
+import com.airmap.airmapsdk.models.flight.AirMapFlightLaancStatus;
 import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
 import com.airmap.airmapsdk.models.pilot.AirMapPilot;
 import com.airmap.airmapsdk.models.rules.AirMapJurisdiction;
@@ -692,6 +693,26 @@ public final class AirMap {
     }
 
     /**
+     * Cancel a flight belonging to the logged in pilot
+     *
+     * @param flight   The flight to delete
+     * @param callback The callback that is invoked on success or error
+     */
+    public static Call cancelFlight(@NonNull AirMapFlight flight, @Nullable AirMapCallback<Void> callback) {
+        return FlightService.cancelFlight(flight, callback);
+    }
+
+    /**
+     * Cancel a flight belonging to the logged in pilot
+     *
+     * @param flightId The id of flight to delete
+     * @param callback The callback that is invoked on success or error
+     */
+    public static Call cancelFlight(@NonNull String flightId, @Nullable AirMapCallback<Void> callback) {
+        return FlightService.cancelFlight(flightId, callback);
+    }
+
+    /**
      * Delete a flight belonging to the logged in pilot
      *
      * @param flight   The flight to delete
@@ -789,6 +810,18 @@ public final class AirMap {
     public static Call verifyPhoneToken(@NonNull String token, @Nullable AirMapCallback<Boolean> callback) {
         return PilotService.verifyToken(token, callback);
     }
+
+    /**
+     * Delete the users profile. WARNING THIS IS IRREVERSIBLE!
+     *
+     * @param callback The callback that is invoked on success or error
+     */
+    public static Call deletePilot(@NonNull String pilotId, @Nullable AirMapCallback<AirMapPilot> callback) {
+        return PilotService.deletePilot(callback);
+    }
+
+
+    //Aircraft
 
     /**
      * Get all the authenticated pilot's aircraft
@@ -1001,6 +1034,10 @@ public final class AirMap {
      */
     public static void getFlightBrief(@NonNull String flightPlanId, @NonNull AirMapCallback<AirMapFlightBriefing> callback) {
         FlightService.getFlightBriefing(flightPlanId, callback);
+    }
+
+    public static void getIfLaancDown(@NonNull String pilotID,@NonNull String geoScope ,@NonNull AirMapCallback<AirMapFlightLaancStatus> callback){
+        FlightService.getIfLaancDown(pilotID, geoScope, callback);
     }
 
     public static void getFlightPlanEvaluation(@NonNull List<String> rulesets, @NonNull AirMapPolygon polygon, AirMapCallback<AirMapEvaluation> callback) {

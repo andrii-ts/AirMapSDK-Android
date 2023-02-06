@@ -44,7 +44,43 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
         }
     }
 
+    public enum DBStatus {
+        AM_ACCEPTED, AM_CANCELLED, AM_REJECTED, CREATED, DELETED, ERROR, FATAL_ERROR, O_CANCELLED, P_ACCEPTED, P_CANCELLED, P_REJECTED, REQUESTED;
+
+        public static DBStatus fromText(String text) {
+            switch (text) {
+                case "AM_ACCEPTED":
+                    return AM_ACCEPTED;
+                case "AM_CANCELLED":
+                    return AM_CANCELLED;
+                case "AM_REJECTED":
+                    return AM_REJECTED;
+                case "CREATED":
+                    return CREATED;
+                case "DELETED":
+                    return DELETED;
+                case "ERROR":
+                    return ERROR;
+                case "FATAL_ERROR":
+                    return FATAL_ERROR;
+                case "O_CANCELLED":
+                    return O_CANCELLED;
+                case "P_ACCEPTED":
+                    return P_ACCEPTED;
+                case "P_CANCELLED":
+                    return P_CANCELLED;
+                case "P_REJECTED":
+                    return P_REJECTED;
+                case "REQUESTED":
+                    return REQUESTED;
+            }
+
+            return AM_REJECTED;
+        }
+    }
+
     private Status status;
+    private DBStatus dbStatus;
     @Nullable
     private AirMapAuthority authority;
     private String description;
@@ -68,6 +104,7 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
             setAuthority(new AirMapAuthority(json.optJSONObject("authority")));
         }
         setStatus(Status.fromText(optString(json, "status")));
+        setDbStatus(DBStatus.fromText(optString(json, "dbstatus")));
         setMessage(optString(json, "message"));
         setDescription(optString(json, "description"));
         setReferenceNumber(optString(json, "reference_number"));
@@ -94,6 +131,10 @@ public class AirMapAuthorization implements AirMapBaseModel, Serializable {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public DBStatus getDbStatus() { return dbStatus; }
+
+    public void setDbStatus(DBStatus dbStatus) { this.dbStatus = dbStatus; }
 
     @Nullable
     public AirMapAuthority getAuthority() {

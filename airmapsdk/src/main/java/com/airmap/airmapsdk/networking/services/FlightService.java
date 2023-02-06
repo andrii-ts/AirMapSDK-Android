@@ -8,6 +8,7 @@ import com.airmap.airmapsdk.models.comm.AirMapComm;
 import com.airmap.airmapsdk.models.flight.AirMapFlight;
 import com.airmap.airmapsdk.models.flight.AirMapFlightBriefing;
 import com.airmap.airmapsdk.models.flight.AirMapFlightFeature;
+import com.airmap.airmapsdk.models.flight.AirMapFlightLaancStatus;
 import com.airmap.airmapsdk.models.flight.AirMapFlightPlan;
 import com.airmap.airmapsdk.networking.callbacks.AirMapCallback;
 import com.airmap.airmapsdk.networking.callbacks.GenericListOkHttpCallback;
@@ -150,6 +151,20 @@ class FlightService extends BaseService {
         return AirMap.getClient().get(url, new GenericOkHttpCallback(callback, AirMapFlightBriefing.class));
     }
 
+    static Call getIfLaancDown(String pilotID, String geoScope, final AirMapCallback<AirMapFlightLaancStatus> callback){
+        String url = flightPlanStatusUrl;
+        Map<String, String> params = new HashMap<>();
+        if (pilotID != null){
+            if (!pilotID.isEmpty())
+                params.put("pilot", pilotID);
+        }
+        if (geoScope != null){
+            if (!geoScope.isEmpty())
+                params.put("geoScope", geoScope);
+        }
+        return AirMap.getClient().get(url,params,new GenericOkHttpCallback(callback, AirMapFlightLaancStatus.class));
+    }
+
     static Call submitFlightPlan(String flightPlanId, boolean isPublic, AirMapCallback<AirMapFlightPlan> callback) {
         String url = String.format(flightPlanSubmitUrl, flightPlanId);
         Map<String, String> params = new HashMap<>();
@@ -201,6 +216,15 @@ class FlightService extends BaseService {
     static Call endFlight(String flightId, AirMapCallback<AirMapFlight> listener) {
         String url = String.format(flightEndUrl, flightId);
         return AirMap.getClient().post(url, new GenericOkHttpCallback(listener, AirMapFlight.class));
+    }
+
+    static Call cancelFlight(AirMapFlight flight, AirMapCallback<Void> listener){
+        return cancelFlight(flight.getFlightId(), listener);
+    }
+
+    static Call cancelFlight(String flightId, AirMapCallback<Void> listener) {
+        String url = String.format(flightCancelUrl, flightId);
+        return AirMap.getClient().post(url, new VoidCallback(listener));
     }
 
     static Call deleteFlight(AirMapFlight flight, AirMapCallback<Void> listener) {

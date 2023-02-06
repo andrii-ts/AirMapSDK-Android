@@ -95,6 +95,7 @@ public class Analytics {
         public static final String flightRequirmentsForm = "flight_requirements_form";
         public static final String statusBottomSheet = "status_bottom_sheet";
         public static final String logout = "logout";
+        public static final String deleteAccount = "delete_account";
         public static final String drawer = "drawer";
         public static final String rules = "rules";
         public static final String advisories = "advisories";
